@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='gbk'?>
+<module>
+	<public>
+		<component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.voucher.IVoucherService</interface>
+	      <implementation>ncc.impl.baseapp.voucher.VoucherServiceImpl</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.mdmservice.IMdmServiceHandler</interface>
+	      <implementation>ncc.impl.baseapp.mdmservice.MdmServiceHandlerImpl</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.scmservice.IScmServiceHandler</interface>
+	      <implementation>ncc.impl.baseapp.scmservice.ScmServiceHandlerImpl</implementation>
+	    </component>
+		
+		<component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.baseapp.utils.IOpenAPIUtils</interface>
+	      <implementation>ncc.impl.baseapp.utils.OpenAPIUtilsImpl</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.baseapp.utils.IHttpUtils</interface>
+	      <implementation>ncc.impl.baseapp.utils.HttpUtils</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.bpmservice.ISend2BPM</interface>
+	      <implementation>ncc.impl.baseapp.bpmservice.Send2BPMImpl</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.baseapp.utils.ILogUtils</interface>
+	      <implementation>ncc.impl.baseapp.utils.LogUtilsImpl</implementation>
+	    </component>
+	    
+	    <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.bpmservice.IBpmCallbackServiceHandler</interface>
+	      <implementation>ncc.impl.baseapp.bpmservice.BpmCallbackServiceHandlerImpl</implementation>
+	    </component>
+
+	   <component priority="0" singleton="false"  remote="true" tx="CMT"  supportAlias="true">
+	      <interface>ncc.itf.baseapp.voucher.ICMPService</interface>
+	      <implementation>ncc.impl.baseapp.voucher.CMPServiceImpl</implementation>
+	    </component>
+	
+	</public>
+</module>

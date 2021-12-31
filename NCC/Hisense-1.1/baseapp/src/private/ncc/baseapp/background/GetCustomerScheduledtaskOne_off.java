@@ -51,11 +51,8 @@ public class GetCustomerScheduledtaskOne_off implements IBackgroundWorkPlugin {
 		
 		UFDate date2 = new UFDate();//结束时间
 		String endTime = (String) date2.toString().subSequence(0, 10);
-//		int pageIndex = 0;
 		try {
 			JSONObject jsons = service.httpsSendGet(customerurl+"?"+"pageIndex="+"1"+"&pageSize=50000&beginTime="+"2021-01-1"+"&endTime="+endTime);
-//			String jsons1 = "{\"success\":true,\"code\":200,\"data\":{\"pageIndex\":0,\"pageSize\":10,\"totalCount\":1548,\"pageData\":[{\"customerId\":\"fb71z450dba243c0a9df05ib516a2bea\",\"name\":\"李某某\",\"gender\":\"2\",\"nation\":null,\"cardType\":\"06\",\"cardId\":\"91379213567299689Z\",\"customerType\":\"0\",\"maritalStatus\":null,\"birthday\":\"1993-08-12 00:00:00\",\"age\":null,\"companyContacts\":null,\"telphoneCode\":null,\"mobile\":\"15764236994\",\"telphone\":null,\"country\":null,\"province\":null,\"city\":null,\"county\":null,\"address\":\"1\",\"email\":null,\"highestEducation\":null,\"systemSource\":\"0\",\"annualIncome\":null,\"profession\":null,\"hobby\":null,\"tagName\":null,\"createId\":\"6df98c8e64e265f31a985f43\",\"createTime\":\"2021-12-01 14:48:28\",\"updateId\":null,\"updateTime\":\"2021-12-02 00:41:27\",\"startDate\":null,\"endDate\":null,\"beginTime\":null,\"endTime\":null,\"tagInfos\":[],\"roleName\":null,\"qyzb\":null}],\"pageCount\":155,\"offset\":0,\"prePage\":1,\"nextPage\":2,\"hasPrePage\":false,\"hasNextPage\":true},\"message\":\"成功\",\"currentTime\":\"2021-12-08 17:37:57\"}";
-//			JSONObject jsons = JSONObject.parseObject(jsons1);
 
 			JSONObject data = (JSONObject) jsons.get("data");
 			IBillcodeManage codeService = NCLocator.getInstance().lookup(IBillcodeManage.class);
