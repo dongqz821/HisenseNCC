@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<rest>
+		<resource classname="nccloud.openapi.uapbd.operation.OperationResource" exinfo="OpenAPI操作"></resource>
+	</rest>
+</module>

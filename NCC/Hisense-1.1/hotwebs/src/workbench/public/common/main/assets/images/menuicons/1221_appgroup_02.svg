@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>审计接口</title>
+    <desc>Created with Sketch.</desc>
+    <g id="审计接口" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组" transform="translate(10.000000, 11.000000)" stroke="#60759C">
+            <path d="M49.1636364,29.8806632 L49.1636364,41.8801347 C49.1636364,45.9027016 45.9027016,49.1636364 41.8801347,49.1636364 L7.28350168,49.1636364 C3.26093478,49.1636364 0,45.9027016 0,41.8801347 L0,7.28350168 C0,3.26093478 3.26093478,0 7.28350168,0 L18.9090909,0" id="路径" stroke-width="5" stroke-linecap="round" transform="translate(24.581818, 24.581818) scale(1, -1) translate(-24.581818, -24.581818) "></path>
+            <rect id="矩形" stroke-width="4" fill="#D8D8D8" transform="translate(17.018182, 30.815526) scale(1, -1) translate(-17.018182, -30.815526) " x="11.4545455" y="30.4518897" width="11.1272727" height="1" rx="0.5"></rect>
+            <rect id="矩形备份" stroke-width="4" fill="#D8D8D8" transform="translate(24.581818, 16.633708) scale(1, -1) translate(-24.581818, -16.633708) " x="11.4545455" y="16.2700715" width="26.2545455" height="1" rx="0.5"></rect>
+        </g>
+        <g id="编组" transform="translate(36.000000, 37.000000)" stroke="#60759C" stroke-width="4">
+            <path d="M15.3571429,10.7142857 C18.3158112,10.7142857 20.7142857,8.31581116 20.7142857,5.35714286 C20.7142857,2.39847455 18.3158112,0 15.3571429,0 C12.3984746,0 10,2.39847455 10,5.35714286 C10,8.31581116 12.3984746,10.7142857 15.3571429,10.7142857 Z M25.3571429,18.5714286 L20,7.85714286 M10.7142857,7.85714286 L5,18.5714286" id="形状结合"></path>
+            <rect id="形状结合" x="2" y="19.1428571" width="26" height="6.71428571" rx="3.35714286"></rect>
+        </g>
+    </g>
+</svg>

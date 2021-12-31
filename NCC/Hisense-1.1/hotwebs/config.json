@@ -1,0 +1,14 @@
+{
+	"buildEntryPath": [
+		"./src/domain/*/*/*/index.js"
+	],
+	"proxy":"http://127.0.0.1:8080",
+	"buildWithoutHTML": [ "uapbd/refer", "uap/refer" ],
+	"devPort": 3006,
+"    patch": {
+		"path": [],
+		"provider": "",
+		"department": "",
+		"project": "",
+		"branch": ""
+	}}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>公共信息</title>
+    <g id="公共信息" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="矩形" stroke="#60759C" stroke-width="4" fill="#D8D8D8" transform="translate(28.000000, 47.593345) scale(1, -1) translate(-28.000000, -47.593345) " x="22" y="47.0933449" width="12" height="1" rx="0.5"></rect>
+        <rect id="矩形备份" stroke="#60759C" stroke-width="4" fill="#D8D8D8" transform="translate(36.000000, 32.593345) scale(1, -1) translate(-36.000000, -32.593345) " x="22" y="32.0933449" width="28" height="1" rx="0.5"></rect>
+        <path d="M56,16.5 L16,16.5 C10.2010101,16.5 5.5,21.2010101 5.5,27 L5.5,53 C5.5,58.7989899 10.2010101,63.5 16,63.5 L56,63.5 C61.7989899,63.5 66.5,58.7989899 66.5,53 L66.5,27 C66.5,21.2010101 61.7989899,16.5 56,16.5 Z M16,21.5 L56,21.5 C59.0375661,21.5 61.5,23.9624339 61.5,27 L61.5,53 C61.5,56.0375661 59.0375661,58.5 56,58.5 L16,58.5 C12.9624339,58.5 10.5,56.0375661 10.5,53 L10.5,27 C10.5,23.9624339 12.9624339,21.5 16,21.5 Z" id="Rectangle-5" fill="#60759C" fill-rule="nonzero"></path>
+        <polygon id="路径-2" fill="#60759C" fill-rule="nonzero" points="20.9008221 17.8679181 36.5 7.60603817 52.0991779 17.8679181 49.9008221 21.209659 36.5 12.393 23.0991779 21.209659"></polygon>
+    </g>
+</svg>

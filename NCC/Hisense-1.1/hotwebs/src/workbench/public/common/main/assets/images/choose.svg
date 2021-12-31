@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="31px" height="22px" viewBox="0 0 31 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>选中眼睛</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M13.7854856,17.4663613 C6.17647059,17.4663613 0,9.0349369 0,8.74839526 C0,8.43142442 6.17647059,0 13.7854856,0 C21.4275594,0 27.708716,8.79657483 27.60403,8.74839526 C27.4993441,8.66978649 21.4275594,17.4663613 13.7854856,17.4663613 Z M13.7331427,2.79441495 C10.5071627,2.79441495 7.90103374,5.38343279 7.90103374,8.60639232 C7.90103374,11.7989226 10.5044078,14.4031551 13.7331427,14.4031551 C16.975652,14.4031551 19.5983103,11.7989226 19.5983103,8.60639232 C19.5983103,5.38343279 16.975652,2.79441495 13.7331427,2.79441495 Z M13.7166133,11.1472306 C12.1821378,11.1472306 10.939681,9.90977643 10.939681,8.40099521 C10.939681,6.892214 12.1821378,5.66997443 13.7166133,5.66997443 C15.2510888,5.66997443 16.4770163,6.892214 16.4770163,8.40099521 C16.4770163,9.90977643 15.2510888,11.1472306 13.7166133,11.1472306 L13.7166133,11.1472306 Z" id="path-1"></path>
+        <filter x="-12.7%" y="-14.3%" width="125.4%" height="140.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="个性化" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="个性化设置-斑马线" transform="translate(-418.000000, -527.000000)" fill-rule="nonzero">
+            <g id="编组-4" transform="translate(326.000000, 453.000000)">
+                <g id="yulan备份-2" transform="translate(94.000000, 75.000000)">
+                    <g id="选中眼睛">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

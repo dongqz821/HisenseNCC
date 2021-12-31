@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding='gbk'?>
+<module>
+  <rest>
+    <resource classname="ncc.itf.baseapp.voucher.IServiceForNC65" exinfo=""/>
+  </rest>
+  <rest>
+    <resource classname="ncc.itf.baseapp.mdmservice.IMdmService" exinfo=""/>
+  </rest>
+  <rest>
+    <resource classname="ncc.itf.baseapp.scmservice.IScmService" exinfo=""/>
+  </rest>
+  <rest>
+    <resource classname="ncc.itf.baseapp.bpmservice.IBpmCallbackService" exinfo=""/>
+  </rest>
+  <rest>
+    <resource classname="ncc.itf.baseapp.voucher.IServiceForNC65CMP" exinfo=""/>
+  </rest>
+</module>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>作业调度备份</title>
+    <g id="作业调度备份" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="矩形" stroke="#60759C" stroke-width="5" fill="#D8D8D8" x="23.6851852" y="29.2407407" width="24.6296296" height="1" rx="0.5"></rect>
+        <circle id="椭圆形" fill="#60759C" cx="43.8703704" cy="29.0555556" r="4.16666667"></circle>
+        <rect id="矩形备份" stroke="#60759C" stroke-width="5" fill="#D8D8D8" x="23.6851852" y="44.0555556" width="24.6296296" height="1" rx="0.5"></rect>
+        <circle id="椭圆形备份" fill="#60759C" cx="29.0555556" cy="43.8703704" r="4.16666667"></circle>
+        <path d="M53,8.5 L19,8.5 C13.2010101,8.5 8.5,13.2010101 8.5,19 L8.5,53 C8.5,58.7989899 13.2010101,63.5 19,63.5 L53,63.5 C58.7989899,63.5 63.5,58.7989899 63.5,53 L63.5,19 C63.5,13.2010101 58.7989899,8.5 53,8.5 Z M19,13.5 L53,13.5 C56.0375661,13.5 58.5,15.9624339 58.5,19 L58.5,53 C58.5,56.0375661 56.0375661,58.5 53,58.5 L19,58.5 C15.9624339,58.5 13.5,56.0375661 13.5,53 L13.5,19 C13.5,15.9624339 15.9624339,13.5 19,13.5 Z" id="Rectangle-5" fill="#60759C" fill-rule="nonzero"></path>
+    </g>
+</svg>

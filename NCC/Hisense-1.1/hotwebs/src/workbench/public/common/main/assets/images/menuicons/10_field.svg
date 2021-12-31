@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>集成平台备份 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="-8.06646416e-15%" x2="50%" y2="99.2134713%" id="linearGradient-1">
+            <stop stop-color="#79F5F6" offset="0%"></stop>
+            <stop stop-color="#36CDD2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="集成平台备份-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M36,6 C52.5685425,6 66,19.4314575 66,36 C66,52.5685425 52.5685425,66 36,66 C19.4314575,66 6,52.5685425 6,36 C6,19.4314575 19.4314575,6 36,6 Z M50.7706282,21.193591 L25.710127,25.8743905 L21.2293718,51.6952979 L46.289873,47.0144984 L50.7706282,21.193591 Z M45.229,26.806 L42.39,43.164 L26.77,46.082 L29.609,29.723 L45.229,26.806 Z M36,33 C34.3431458,33 33,34.3431458 33,36 C33,37.6568542 34.3431458,39 36,39 C37.6568542,39 39,37.6568542 39,36 C39,34.3431458 37.6568542,33 36,33 Z" id="形状结合" fill="url(#linearGradient-1)"></path>
+    </g>
+</svg>

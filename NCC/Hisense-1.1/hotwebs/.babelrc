@@ -1,0 +1,20 @@
+{
+	"presets": [ "env", "react", "stage-2" ],
+	"plugins": [
+		"jsx-control-statements",
+		[
+			"import-bee",
+			{
+				"style": true
+			}
+		],
+		"transform-decorators-legacy",
+		[
+			"import",
+			{
+				"libraryName": "antd-mobile",
+				"style": "css"
+			}
+		]
+	]
+}
