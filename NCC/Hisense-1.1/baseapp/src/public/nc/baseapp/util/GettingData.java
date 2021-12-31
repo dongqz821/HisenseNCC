@@ -8,10 +8,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.HostnameVerifier;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cloudera.impala.jdbc42.internal.apache.http.impl.client.CloseableHttpClient;
+import com.cloudera.impala.jdbc42.internal.apache.http.impl.client.HttpClients;
+import org.apache.commons.io.IOUtils;
 
 import nc.bs.framework.common.InvocationInfoProxy;
 import nc.bs.framework.common.NCLocator;
@@ -19,9 +26,22 @@ import nc.bs.framework.server.ISecurityTokenCallback;
 import nc.bs.logging.Logger;
 import nc.itf.uap.IUAPQueryBS;
 import nc.jdbc.framework.processor.ColumnProcessor;
-import nc.vo.pub.BusinessException;
 import nc.vo.pubapp.pattern.exception.ExceptionUtils;
 import ncc.baseapp.utils.ConfigUtils;
+
+import java.security.cert.CertificateException;
+
+import nc.baseapp.util.GettingData;
+import java.io.OutputStream;
+import org.apache.commons.codec.binary.Base64;
+import nccloud.security.impl.SignatureTookKit;
+import sun.misc.BASE64Decoder;
+
+import java.security.cert.X509Certificate;
+  
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class GettingData {
 	
@@ -43,12 +63,14 @@ public class GettingData {
 		JSONObject json = JSONObject.parseObject(userInfo);// json数据格式转换成json对象
 		JSONObject data = json.getJSONObject("data");
 		String psncode = data.getString("userAccount");
+		
 		// 2、使用用户信息的员工编码获取NC用户编码
 		IUAPQueryBS query = NCLocator.getInstance().lookup(IUAPQueryBS.class);// 可以执行sql语句的类
 		String sql = "select a.user_code from sm_user a left join bd_psndoc b on a.pk_psndoc = b.pk_psndoc where b.code='"
 				+ psncode + "'";
 		try {
 			usercode = (java.lang.String) query.executeQuery(sql, new ColumnProcessor());// 执行sql语句并返回特定的值，且强转成String类型
+			
 		} catch (Exception e) {
 			return "{\"success\":\"false\",\"code\":\"300\",\"msg\":\"查询失败"+e.getMessage()+"\"}";
 		}
@@ -103,7 +125,11 @@ public class GettingData {
 	        try{
 	            //创建远程url连接对象
 	            URL url = new URL(urlStr);
-	            //通过远程url连接对象打开一个连接，强转成HTTPURLConnection类
+	            //https协议的跳过认证
+	            if("https".equalsIgnoreCase(url.getProtocol())){
+					createSSLClientDefault();//如果是https请求，跳过认证
+		        }
+	          //通过远程url连接对象打开一个连接，强转成HTTPURLConnection类
 	            conn = (HttpURLConnection) url.openConnection();
 	            conn.setRequestMethod("GET");
 	            //设置连接超时时间和读取超时时间
@@ -156,4 +182,140 @@ public class GettingData {
 	        return result.toString();
 	}
 
+	public String httpsyanzheng(String url, String usercode)throws Exception {
+		ConfigUtils configUtils = new ConfigUtils();
+		String client_name = configUtils.getValueFromProperties("client_name");
+		String client_id = configUtils.getValueFromProperties("client_id_dqz");
+		String client_security = configUtils.getValueFromProperties("client_security");
+		String busicentercode = configUtils.getValueFromProperties("busicentercode");
+		URL u = new URL(url);
+		URLConnection uc = null;
+		try {
+//			String client_name = "NCC1107"; 
+//			String client_id = "1";
+//			String client_security = "123456";
+			
+			if("https".equalsIgnoreCase(u.getProtocol())){
+				createSSLClientDefault();//如果是https请求，跳过认证
+	        }
+	        uc = u.openConnection();
+	        uc.setConnectTimeout(2000);
+	        uc.setReadTimeout(2000);
+	        uc.setDoOutput(true);
+			uc.setUseCaches(false);
+			uc.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			uc.setRequestProperty("Content-Length", "10000");
+			uc.setRequestProperty("userid", usercode);
+			uc.setRequestProperty("busicentercode", busicentercode);//账套编码
+			HttpURLConnection hc = (HttpURLConnection) uc;
+			hc.setRequestMethod("POST");
+			OutputStream os = null;
+			DataOutputStream dos = null;
+			String returnFlag = "";
+			InputStream is = null;
+			try {
+				StringBuffer sb = new StringBuffer();
+				String ts = (System.currentTimeMillis() + "").substring(0, 6);
+				String keys = usercode + client_security + ts;
+				String security = new Base64().encodeToString(SignatureTookKit.digestSign(usercode.getBytes("UTF-8"), keys.getBytes("UTF-8")));
+				//response.write();//response.getWriter().writer()
+	            boolean isPass = SignatureTookKit.digestVerify(usercode.getBytes("UTF-8"), keys.getBytes("UTF-8"), new BASE64Decoder().decodeBuffer(security));
+				if(isPass) {
+					System.out.print("true");
+				}else{
+					System.out.print("false");
+	            }
+				sb.append("type=type_security&client_name=" + client_name + "&usercode=" + usercode + "&client_id=" + client_id + "&security="+security+ "&ts=" + ts);
+				String sss = sb.toString().replaceAll("\\+","%2B");
+				os = hc.getOutputStream();
+				dos = new DataOutputStream(os);
+				dos.writeBytes(sss);
+				dos.flush();
+	
+				is = hc.getInputStream();
+				int ch;
+	
+				while ((ch = is.read()) != -1) { 
+					returnFlag += String.valueOf((char) ch);
+				}
+	
+				System.out.println(returnFlag);
+				
+				return returnFlag.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (dos != null) {
+					try {
+						dos.close();
+					} catch (Exception e2) {
+					}
+				}
+				if (os != null) {
+					try {
+						os.close();
+					} catch (Exception e2) {
+					}
+				}
+				if (is != null)
+					try {
+						is.close();
+					} catch (Exception e2) {
+					}
+			}
+		}catch (Exception e1){
+			e1.printStackTrace();
+		}
+		
+        return IOUtils.toString(uc.getInputStream());
+	}
+	
+	public static CloseableHttpClient createSSLClientDefault() {
+        try {
+        	 HostnameVerifier hv = new HostnameVerifier() {
+					public boolean verify(String hostname, SSLSession session) {
+						return true;
+					}
+        	    };
+    	    trustAllHttpsCertificates();
+    	    HttpsURLConnection.setDefaultHostnameVerifier(hv);
+
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
+        
+        return HttpClients.createDefault();
+    }
+	private static void trustAllHttpsCertificates() throws Exception {
+	    TrustManager[] trustAllCerts = new TrustManager[1];
+	    TrustManager tm = new miTM();
+	    trustAllCerts[0] = tm;
+	    SSLContext sc = SSLContext.getInstance("SSL");
+	    sc.init(null, trustAllCerts, null);
+	    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+	}
+	static class miTM implements TrustManager,X509TrustManager {
+	    public X509Certificate[] getAcceptedIssuers() {
+	        return null;
+	    }
+	  
+	    public boolean isServerTrusted(X509Certificate[] certs) {
+	        return true;
+	    }
+	  
+	    public boolean isClientTrusted(X509Certificate[] certs) {
+	        return true;
+	    }
+	  
+	    public void checkServerTrusted(X509Certificate[] certs, String authType)
+	            throws CertificateException {
+	        return;
+	    }
+	  
+	    public void checkClientTrusted(X509Certificate[] certs, String authType)
+	            throws CertificateException {
+	        return;
+	    }
+	}
+	
 }
