@@ -1,9 +1,12 @@
 package ncc.baseapp.background;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
@@ -35,25 +38,53 @@ import nc.vo.pubapp.pattern.exception.ExceptionUtils;
 public class GetCustomerScheduledtask implements IBackgroundWorkPlugin {
 	@SuppressWarnings({ "unchecked"})
 	@Override
-	public PreAlertObject executeTask(BgWorkingContext ds) throws BusinessException {
+	public PreAlertObject executeTask(BgWorkingContext context) throws BusinessException {
+		
+		LinkedHashMap<String, Object> keyMap = context.getKeyMap();
+        String beginDate = (String)keyMap.get("beginDate");//获取定时任务阈值参数-开始日期
+        String endDate = (String)keyMap.get("endDate");//获取定时任务阈值参数-截至日期
+        String pageSize = (String)keyMap.get("pageSize");//获取定时任务阈值参数-条数
+        UFDate date = new UFDate();//结束时间
+        if(beginDate==null) {
+            beginDate = (String) date.toString().subSequence(0, 10)+" 00:00:00";
+        }else {
+            beginDate = beginDate +" 00:00:00";
+        }
+        if(endDate==null) {
+//                endDate = new UFDate().getDateBefore(1).toStdString().substring(0, 10);
+        	endDate = (String) date.toString().subSequence(0, 10)+" 23:59:59";
+        }else {
+            endDate = endDate +" 23:59:59";
+        }
+        if(pageSize==null) {
+        	pageSize = "50000";
+        }
+        String beginTime= "";
+        String endTime = "";
+        try {
+			 beginTime = URLEncoder.encode(beginDate, "UTF-8");
+			 endTime = URLEncoder.encode(endDate, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		
  		ICMPService service = NCLocator.getInstance().lookup(ICMPService.class);
 		ConfigUtils configUtils = new ConfigUtils();
 		String customerurl = configUtils.getValueFromProperties("customerurl");
 		
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//格式转化
-		Date date1 = new Date();//开始时间
-		Calendar calendars = Calendar.getInstance(); //得到日历  
-		calendars.setTime(date1);//把当前时间赋给日历  
-		calendars.add(Calendar.DAY_OF_MONTH, -1);  //获取前一天的时间
-		Date dBefore = calendars.getTime(); //得到前两天的时间
-		String str = df.format(dBefore);
-		String beginTime = (String) str.toString().subSequence(0, 10);
-		
-		UFDate date2 = new UFDate();//结束时间
-		String endTime = (String) date2.toString().subSequence(0, 10);
+//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//格式转化
+//		Date date1 = new Date();//开始时间
+//		Calendar calendars = Calendar.getInstance(); //得到日历  
+//		calendars.setTime(date1);//把当前时间赋给日历  
+//		calendars.add(Calendar.DAY_OF_MONTH, -1);  //获取前一天的时间
+//		Date dBefore = calendars.getTime(); //得到前两天的时间
+//		String str = df.format(dBefore);
+//		String beginTime = (String) str.toString().subSequence(0, 10);
+//		
+
 		try {
 
-			JSONObject jsons = service.httpsSendGet(customerurl+"?"+"pageIndex=1&pageSize=10000&beginTime="+beginTime+"&endTime="+endTime);
+			JSONObject jsons = service.httpsSendGet(customerurl+"?"+"pageIndex=1&pageSize="+pageSize+"&beginTime="+beginTime+"&endTime="+endTime);
 //			String jsons1 = "{\"success\":true,\"code\":200,\"data\":{\"pageIndex\":0,\"pageSize\":10,\"totalCount\":1548,\"pageData\":[{\"customerId\":\"fb71z450dba243c0a9df05ib516a2bea\",\"name\":\"李某某\",\"gender\":\"2\",\"nation\":null,\"cardType\":\"06\",\"cardId\":\"91379213567299689Z\",\"customerType\":\"0\",\"maritalStatus\":null,\"birthday\":\"1993-08-12 00:00:00\",\"age\":null,\"companyContacts\":null,\"telphoneCode\":null,\"mobile\":\"15764236994\",\"telphone\":null,\"country\":null,\"province\":null,\"city\":null,\"county\":null,\"address\":\"1\",\"email\":null,\"highestEducation\":null,\"systemSource\":\"0\",\"annualIncome\":null,\"profession\":null,\"hobby\":null,\"tagName\":null,\"createId\":\"6df98c8e64e265f31a985f43\",\"createTime\":\"2021-12-01 14:48:28\",\"updateId\":null,\"updateTime\":\"2021-12-02 00:41:27\",\"startDate\":null,\"endDate\":null,\"beginTime\":null,\"endTime\":null,\"tagInfos\":[],\"roleName\":null,\"qyzb\":null}],\"pageCount\":155,\"offset\":0,\"prePage\":1,\"nextPage\":2,\"hasPrePage\":false,\"hasNextPage\":true},\"message\":\"成功\",\"currentTime\":\"2021-12-08 17:37:57\"}";
 //			JSONObject jsons = JSONObject.parseObject(jsons1);
 
@@ -72,7 +103,7 @@ public class GetCustomerScheduledtask implements IBackgroundWorkPlugin {
 	            String custype = (String)map.get("customerType");
 	            if ("0".equals(custype)) {//个人客户
 //	            	if (true) {
-//						continue;
+//	            		continue;
 //					}
 	            	List<CustomerVO> list2 = (List<CustomerVO>) query.retrieveByClause(CustomerVO.class, "nvl(dr,0)=0 and taxpayerid='"+map.get("cardId")+"'");
 	            	if(list2!=null && list2.size()>0){
@@ -107,7 +138,9 @@ public class GetCustomerScheduledtask implements IBackgroundWorkPlugin {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+	            	
 	            	}else {//更新
+
 	            		customerVO.setDef6(map.get("customerId")==null?"":(String)map.get("customerId"));//客户标识
 						customerVO.setName(map.get("name")==null?"":(String)map.get("name"));
 						customerVO.setTel1((String) map.get("mobile")); // 电话

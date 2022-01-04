@@ -70,7 +70,6 @@ public class GettingData {
 				+ psncode + "'";
 		try {
 			usercode = (java.lang.String) query.executeQuery(sql, new ColumnProcessor());// 执行sql语句并返回特定的值，且强转成String类型
-			
 		} catch (Exception e) {
 			return "{\"success\":\"false\",\"code\":\"300\",\"msg\":\"查询失败"+e.getMessage()+"\"}";
 		}

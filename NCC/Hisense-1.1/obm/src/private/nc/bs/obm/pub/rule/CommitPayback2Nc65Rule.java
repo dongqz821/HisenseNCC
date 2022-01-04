@@ -35,30 +35,33 @@ public class CommitPayback2Nc65Rule implements IRule<AggConfirmPayHVO> {
 	        }
 			
 			//回写nc65支付状态
-			if (!"".equals(bank.get("def20")) && bank.get("def20") != null) {
-				Map<String, Object> map = new HashMap<>();
-				map.put("pk_upbill", bank.get("pk_upbill"));//来源单据主键
-				map.put("bill_type", bank.get("Bill_type"));//单据类型
-				map.put("def20", bank.get("def20"));//来源系统
-				map.put("pay", "2");
-				
-				String param = JSONObject.toJSONString(map);
-				JSONObject json = JSONObject.parseObject(param);
-				try {
-					//调用nc65接口 回写签字状态
-					ICMPService gett = NCLocator.getInstance().lookup(ICMPService.class);
-					String result = gett.writeBack2NC65(json);
-//					ExceptionUtils.wrappBusinessException("NC65返回的数据为=" + result);
-					JSONObject jsonsucc = JSONObject.parseObject(result);
-					if (!"200".equals(jsonsucc.get("code"))) {
-						ExceptionUtils.wrappBusinessException("回写65支付失败:" + jsonsucc.getString("msg"));
+			if ("0".equals(aggvos[0].getParentVO().getAttributeValue("confirmstate")) || "0.0".equals(aggvos[0].getParentVO().getAttributeValue("confirmstate"))) {
+				if (!"".equals(bank.get("def20")) && bank.get("def20") != null) {
+					Map<String, Object> map = new HashMap<>();
+					map.put("pk_upbill", bank.get("pk_upbill"));//来源单据主键
+					map.put("bill_type", bank.get("Bill_type"));//单据类型
+					map.put("def20", bank.get("def20"));//来源系统
+					map.put("pay", "2");
+					
+					String param = JSONObject.toJSONString(map);
+					JSONObject json = JSONObject.parseObject(param);
+					try {
+						//调用nc65接口 回写签字状态
+						ICMPService gett = NCLocator.getInstance().lookup(ICMPService.class);
+						String result = gett.writeBack2NC65(json);
+	//					ExceptionUtils.wrappBusinessException("NC65返回的数据为=" + result);
+						JSONObject jsonsucc = JSONObject.parseObject(result);
+						if (!"200".equals(jsonsucc.get("code"))) {
+							ExceptionUtils.wrappBusinessException("回写65支付失败:" + jsonsucc.getString("msg"));
+						}
+	//					ExceptionUtils.wrappBusinessException("调用65支付接口失败:" + json );
+					} catch (Exception e) {
+						Logger.error(e.getMessage());
+	//					throw new BusinessException("回写NC65单据失败，请检查！" + e.getMessage());
+			            ExceptionUtils.wrappBusinessException("回写NC65单据失败，请检查!"+e.getMessage());
 					}
-//					ExceptionUtils.wrappBusinessException("调用65支付接口失败:" + json );
-				} catch (Exception e) {
-					Logger.error(e.getMessage());
-//					throw new BusinessException("回写NC65单据失败，请检查！" + e.getMessage());
-		            ExceptionUtils.wrappBusinessException("回写NC65单据失败，请检查!"+e.getMessage());
 				}
+			
 			}
 		}
 		

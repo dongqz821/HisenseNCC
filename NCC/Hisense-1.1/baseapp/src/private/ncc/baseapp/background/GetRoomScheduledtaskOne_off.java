@@ -1,18 +1,15 @@
 package ncc.baseapp.background;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import nc.jdbc.framework.processor.MapProcessor;
-import nc.pub.billcode.itf.IBillcodeManage;
+
 import nc.bs.dao.BaseDAO;
 import nc.bs.framework.common.NCLocator;
 import nc.bs.pub.pa.PreAlertObject;
@@ -27,59 +24,32 @@ import nc.vo.pubapp.pattern.exception.ExceptionUtils;
 import ncc.baseapp.utils.ConfigUtils;
 import ncc.itf.baseapp.voucher.ICMPService;
 
-public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
+public class GetRoomScheduledtaskOne_off implements IBackgroundWorkPlugin {
 	@SuppressWarnings("unchecked")
 	@Override
-	public PreAlertObject executeTask(BgWorkingContext context) throws BusinessException {
-		
-		LinkedHashMap<String, Object> keyMap = context.getKeyMap();
-        String beginDate = (String)keyMap.get("beginDate");//获取定时任务阈值参数-开始日期
-        String endDate = (String)keyMap.get("endDate");//获取定时任务阈值参数-截至日期
-        String pageSize = (String)keyMap.get("pageSize");//获取定时任务阈值参数-条数
-        UFDate date = new UFDate();//结束时间
-        if(beginDate==null) {
-            beginDate = (String) date.toString().subSequence(0, 10)+" 00:00:00";
-        }else {
-            beginDate = beginDate +" 00:00:00";
-        }
-        if(endDate==null) {
-//          endDate = new UFDate().getDateBefore(1).toStdString().substring(0, 10);//获取前一天的时间
-        	endDate = (String) date.toString().subSequence(0, 10)+" 23:59:59";
-        }else {
-            endDate = endDate +" 23:59:59";
-        }
-        if(pageSize==null) {
-        	pageSize = "50000";
-        }
-        String beginTime= "";
-        String endTime = "";
-        try {
-			 beginTime = URLEncoder.encode(beginDate, "UTF-8");
-			 endTime = URLEncoder.encode(endDate, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-		
+	public PreAlertObject executeTask(BgWorkingContext arg0) throws BusinessException {
 		ICMPService service = NCLocator.getInstance().lookup(ICMPService.class);
 		ConfigUtils configUtils = new ConfigUtils();
 		String roomurl = configUtils.getValueFromProperties("roomurl");
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//格式转化
-//		Date date1 = new Date();//开始时间
-//		Calendar calendars = Calendar.getInstance(); //得到日历  
-//		calendars.setTime(date1);//把当前时间赋给日历 
-//		calendars.add(Calendar.DAY_OF_MONTH, -1);  //获取前两天的时间
-//		Date dBefore = calendars.getTime(); //得到前两天的时间
-//		String str = df.format(dBefore);
-//		String beginTime = (String) str.toString().subSequence(0, 10);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//格式转化
+		Date date1 = new Date();//开始时间
+		Calendar calendars = Calendar.getInstance(); //得到日历  
+		calendars.setTime(date1);//把当前时间赋给日历 
+		calendars.add(Calendar.DAY_OF_MONTH, -1);  //获取前两天的时间
+		Date dBefore = calendars.getTime(); //得到前两天的时间
+		String str = df.format(dBefore);
+		String beginTime = (String) str.toString().subSequence(0, 10);
+		
+		UFDate date2 = new UFDate();//结束时间
+		String endTime = (String) date2.toString().subSequence(0, 10);
 		
 		try {
-			JSONObject jsons = service.httpsSendGet(roomurl+"?"+"pageIndex=1&pageSize="+pageSize+"&beginTime="+beginTime+"&endTime="+endTime);
+			JSONObject jsons = service.httpsSendGet(roomurl+"?"+"pageIndex=1&pageSize=10000&beginTime="+"2021-01-1"+"&endTime="+endTime);
 			JSONObject data = (JSONObject) jsons.get("data");
 			List<Object> pageData = (List<Object>) data.get("pageData");
 			Map<String, Object> map = null;
 			List<DefdocVO> list = new ArrayList<DefdocVO>();
 			for (int i = 0; i < pageData.size(); i++) {
-				list.clear();
 				map = (Map<String, Object>) pageData.get(i);
 				  //根据客户中台接口的主键新增或更新供应商档案
 				DefdocVO defdocVO = null;
@@ -108,7 +78,7 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 	            	docvo.setShortname((String) map.get("roomShortName"));//房间简称
 	            	docvo.setPk_defdoclist("10011A1000000000N6DK");//自定义档案列表主键  -- 房号
 	            	docvo.setName((String) map.get("roomNumber"));//名称放他们的 房间号
-//	            	docvo.setCode((String) map.get("roomNumber"));//房号
+	            	docvo.setCode((String) map.get("roomNumber"));//房号
 	            	docvo.setDef2((String) map.get("sourceId"));//明源id
 	            	docvo.setCreationtime(new UFDateTime());
 	            	docvo.setDataoriginflag(0);//分布式
@@ -117,12 +87,11 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 	            	//内部编码
 	            	docvo.setPk_group("00011A10000000000MDP");
 	            	docvo.setPk_org((String) bank.get("pk_duty_org"));
-	            	docvo.setCode((String)map.get("roomName"));
 	            	list.add(docvo);
 					BaseDAO dao = new BaseDAO();
 					dao.insertVOList(list);
 				}else {
-					System.out.println("不做处理");
+					System.out.println("不");
 				}
 			}
 	
