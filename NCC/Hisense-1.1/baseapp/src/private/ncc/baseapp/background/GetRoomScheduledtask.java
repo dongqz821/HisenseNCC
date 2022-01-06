@@ -6,11 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+
+import nc.jdbc.framework.processor.MapListProcessor;
 import nc.jdbc.framework.processor.MapProcessor;
 import nc.pub.billcode.itf.IBillcodeManage;
 import nc.bs.dao.BaseDAO;
@@ -26,9 +29,10 @@ import nc.vo.pub.lang.UFDateTime;
 import nc.vo.pubapp.pattern.exception.ExceptionUtils;
 import ncc.baseapp.utils.ConfigUtils;
 import ncc.itf.baseapp.voucher.ICMPService;
+import nccloud.base.collection.MapList;
 
 public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "null" })
 	@Override
 	public PreAlertObject executeTask(BgWorkingContext context) throws BusinessException {
 		
@@ -78,6 +82,20 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 			List<Object> pageData = (List<Object>) data.get("pageData");
 			Map<String, Object> map = null;
 			List<DefdocVO> list = new ArrayList<DefdocVO>();
+			
+			IUAPQueryBS query = NCLocator.getInstance().lookup(IUAPQueryBS.class);
+			Map<String, Object> maporg = new HashMap<String, Object>();
+            try {
+                List<Map<String, Object>> list1 = (List) query.executeQuery("select pk_duty_org,def2 from bd_project where dr = '0' and  def2 != '~'", new MapListProcessor());
+                if(list1!=null){
+                	for (int i = 0; i < list1.size(); i++) {
+                		maporg.put((String) list1.get(i).get("def2"), list1.get(i).get("pk_duty_org"));
+					}
+                }
+            } catch (BusinessException e) {
+                ExceptionUtils.wrappBusinessException("调用sql发生异常<查询分期id>："+e.getMessage());
+            }  
+           
 			for (int i = 0; i < pageData.size(); i++) {
 				list.clear();
 				map = (Map<String, Object>) pageData.get(i);
@@ -87,16 +105,6 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 				if(stageId == null || "".equals(stageId)){
 					continue;
 				}
-				IUAPQueryBS query = NCLocator.getInstance().lookup(IUAPQueryBS.class);
-				Map bank = null;
-                try {
-                    Object object = query.executeQuery("select pk_duty_org from bd_project where def2 = '"+stageId+"'", new MapProcessor());
-                    if(object!=null){
-                    	bank = (Map) object;
-                    }
-                } catch (BusinessException e) {
-                    ExceptionUtils.wrappBusinessException("调用sql发生异常："+e.getMessage());
-                }     
                 
 	            List<DefdocVO> list1 = (List<DefdocVO>) query.retrieveByClause(DefdocVO.class, "nvl(dr,0)=0 and def2='"+map.get("sourceId")+"'");
 	            if(list1!=null && list1.size()>0){
@@ -105,9 +113,9 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 	            if (defdocVO == null) {
 	            	nc.vo.bd.defdoc.DefdocVO  docvo = new nc.vo.bd.defdoc.DefdocVO();
 	            	docvo.setDef1((String) map.get("roomId"));//房间id
-	            	docvo.setShortname((String) map.get("roomShortName"));//房间简称
+	            	docvo.setShortname( map.get("roomShortName")==null?"":(String) map.get("roomShortName"));//房间简称
 	            	docvo.setPk_defdoclist("10011A1000000000N6DK");//自定义档案列表主键  -- 房号
-	            	docvo.setName((String) map.get("roomNumber"));//名称放他们的 房间号
+	            	docvo.setName(map.get("roomName")==null?"":(String) map.get("roomName"));//名称放他们的 房间号
 //	            	docvo.setCode((String) map.get("roomNumber"));//房号
 	            	docvo.setDef2((String) map.get("sourceId"));//明源id
 	            	docvo.setCreationtime(new UFDateTime());
@@ -116,8 +124,8 @@ public class GetRoomScheduledtask implements IBackgroundWorkPlugin {
 	            	docvo.setEnablestate(2);//启用状态 -- 已起用
 	            	//内部编码
 	            	docvo.setPk_group("00011A10000000000MDP");
-	            	docvo.setPk_org((String) bank.get("pk_duty_org"));
-	            	docvo.setCode((String)map.get("roomName"));
+	            	docvo.setPk_org(maporg.get(stageId)==null?"00011A10000000000MDP":(String) maporg.get(stageId));
+	            	docvo.setCode(map.get("roomName")==null?"":(String) map.get("roomName"));
 	            	list.add(docvo);
 					BaseDAO dao = new BaseDAO();
 					dao.insertVOList(list);
